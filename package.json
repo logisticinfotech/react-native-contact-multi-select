@@ -1,0 +1,29 @@
+{
+  "name": "react-native-contact-multi-select",
+  "version": "1.0.0",
+  "description": "React native contact multi selection.",
+  "main": "Contacts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/logisticinfotech/react-native-contact-multi-select.git"
+  },
+  "keywords": [
+    "Contacts",
+    "MultiContactSelect",
+    "ContactSelection",
+    "FetchContacts",
+    "React-Native"
+  ],
+  "author": "Nishita Patel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/logisticinfotech/react-native-contact-multi-select/issues"
+  },
+  "homepage": "https://github.com/logisticinfotech/react-native-contact-multi-select#readme",
+  "dependencies": {
+    "react-native-contacts": "^4.0.0"
+  }
+}
