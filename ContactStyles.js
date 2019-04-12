@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
 	sepratorStyle: {
 		height: 1,
 		width: "90%",
-		backgroundColor: "#DEDEDE",
+		backgroundColor: "#DEDEDE"
 	},
 	imgContactList: {
 		width: 60,
@@ -46,16 +46,17 @@ export const styles = StyleSheet.create({
 	viewSelectedContactList: {
 		margin: 10,
 		alignItems: "center",
-		width: 70
+		width: 70,
 	},
 	imgSelected: {
 		width: 60,
-		aspectRatio: 1,
+		height: 60,
 		borderRadius: 30
 	},
 	imgCancelStyle: {
 		resizeMode: "contain",
-		flex: 1
+		width: "100%",
+		height: "100%",
 	},
 	txtSelectedContact: {
 		fontSize: 15,
@@ -69,8 +70,7 @@ export const styles = StyleSheet.create({
 		position: "absolute",
 		right: 0,
 		width: 25,
-		height: 25,
-		marginRight: 10
+		height: 25
 	},
 	searchInput: {
 		width: "96%",

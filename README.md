@@ -16,10 +16,23 @@ https://github.com/logisticinfotech/react-native-contact-multi-select
 
 # Installation
 ```
+To use this module you need to install it and configure the permissions. Please read the below entire section.
+
+install with npm 
+
 npm i react-native-contact-multi-select
 
+link library
+
 react-native link react-native-contacts
+
+Configure your project :
 ```
+## iOS
+```
+1. Add kit specific "permission" keys to your Xcode Info.plist file, in order to make requestPermission work. Otherwise your app crashes when requesting the specific permission. Open Info.plist. Add key Privacy - Contacts Usage Description with your kit specific permission. The value for the key is optional in development. If you submit to the App Store the value must explain why you need this permission.
+```
+![](PlistImage)
 # Usage
 ```
 import Contacts from "react-native-contact-multi-select";

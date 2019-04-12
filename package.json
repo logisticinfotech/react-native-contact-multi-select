@@ -1,6 +1,6 @@
 {
   "name": "react-native-contact-multi-select",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React native contact multi selection.",
   "main": "Contacts.js",
   "scripts": {

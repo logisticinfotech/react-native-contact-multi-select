@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, SafeAreaView, Text, TouchableOpacity, FlatList, Image, TextInput } from "react-native";
+import { View, SafeAreaView, Text, TouchableOpacity, FlatList, ActivityIndicator, Image, TextInput, PermissionsAndroid, Platform } from "react-native";
 import Contacts from "react-native-contacts";
 import { styles } from "./ContactStyles";
 import PropTypes from "prop-types";
@@ -9,19 +9,70 @@ export default class ContactScreen extends Component {
 		this.state = {
 			contactList: [],
 			selectedContact: [],
-			text: ""
+			text: "",
+			isLoading: true
 		};
 		this.arrayholder = [];
 	}
-	componentDidMount() {
+	async componentDidMount() {
+		if (Platform.OS === "android") {
+			try {
+				const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+					title: "App Contact Permission",
+					message: "This App needs access to your contacts ",
+
+					buttonNegative: "Cancel",
+					buttonPositive: "OK"
+				});
+				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+					this.getListOfContacts();
+				} else {
+					this.setState({ isLoading: false });
+					this.getOtherContacts();
+				}
+			} catch (err) {
+				this.setState({ isLoading: false });
+			}
+		} else {
+			Contacts.checkPermission((err, permission) => {
+				if (permission === "denied") {
+					this.setState({ isLoading: false });
+					this.getOtherContacts();
+				} else {
+					this.getListOfContacts();
+				}
+			});
+		}
+	}
+	getOtherContacts = () => {
 		const { otherContactList } = this.props;
 		const arrFinal = [];
+		if (otherContactList.length > 0) {
+			otherContactList.map(listItem => {
+				arrFinal.push(listItem);
+			});
+		}
+		arrFinal.map((listItem, index) => {
+			listItem.isSelected = false;
+			listItem.id = index;
+		});
+		this.setState({ contactList: arrFinal, isLoading: false });
+		this.arrayholder = arrFinal;
+	};
+	getListOfContacts = () => {
+		const { otherContactList } = this.props;
+		const arrFinal = [];
+
 		Contacts.getAll((err, contacts) => {
 			if (err) {
 				throw err;
 			}
 			contacts.map(listItem => {
-				arrFinal.push({ fullname: listItem.givenName + " " + listItem.familyName, phoneNumber: listItem.phoneNumbers[0].number, avatar: listItem.thumbnailPath });
+				arrFinal.push({
+					fullname: listItem.givenName + " " + listItem.familyName,
+					phoneNumber: listItem.phoneNumbers.length > 0 ? listItem.phoneNumbers[0].number : "",
+					avatar: listItem.thumbnailPath
+				});
 			});
 			if (otherContactList.length > 0) {
 				otherContactList.map(listItem => {
@@ -32,10 +83,10 @@ export default class ContactScreen extends Component {
 				listItem.isSelected = false;
 				listItem.id = index;
 			});
-			this.setState({ contactList: arrFinal });
+			this.setState({ contactList: arrFinal, isLoading: false });
 			this.arrayholder = arrFinal;
 		});
-	}
+	};
 	_renderSeparator = () => {
 		const { sepratorStyle } = this.props;
 		return <View style={[styles.sepratorStyle, sepratorStyle]} />;
@@ -87,12 +138,12 @@ export default class ContactScreen extends Component {
 		return (
 			<TouchableOpacity onPress={() => this.checkContact(item)}>
 				<View style={styles.viewContactList}>
-					<Image defaultSource={require("../src/Resources/user.png")} source={{ uri: item.avatar }} style={styles.imgContactList} />
+					<Image source={item.avatar !== "" ? { uri: item.avatar } : require("./Resources/user.png")} style={styles.imgContactList} />
 					<View style={{ flexDirection: "column", width: "60%" }}>
 						<Text style={styles.txtContactList}>{item.fullname}</Text>
 						<Text style={styles.txtPhoneNumber}>{item.phoneNumber}</Text>
 					</View>
-					{item.isSelected && <Image source={require("../src/Resources/check-mark.png")} style={[styles.viewCheckMarkStyle, viewCheckMarkStyle]} />}
+					{item.isSelected && <Image source={require("./Resources/check-mark.png")} style={[styles.viewCheckMarkStyle, viewCheckMarkStyle]} />}
 				</View>
 			</TouchableOpacity>
 		);
@@ -101,12 +152,11 @@ export default class ContactScreen extends Component {
 		const { viewCloseStyle } = this.props;
 		return (
 			<View style={styles.viewSelectedContactList}>
-				<View>
-					<Image defaultSource={require("../src/Resources/user.png")} source={{ uri: item.avatar }} style={styles.imgSelected} />
-					<TouchableOpacity style={[styles.viewCloseStyle, viewCloseStyle]} onPress={() => this.checkExist(item)}>
-						<Image source={require("../src/Resources/error.png")} style={styles.imgCancelStyle} />
-					</TouchableOpacity>
-				</View>
+				<Image source={item.avatar !== "" ? { uri: item.avatar } : require("./Resources/user.png")} style={styles.imgSelected} />
+				<TouchableOpacity onPress={() => this.checkExist(item)} style={[styles.viewCloseStyle, viewCloseStyle]}>
+					<Image source={require("./Resources/error.png")} style={styles.imgCancelStyle} />
+				</TouchableOpacity>
+
 				<Text style={styles.txtSelectedContact} numberOfLines={1}>
 					{item.fullname}
 				</Text>
@@ -149,6 +199,11 @@ export default class ContactScreen extends Component {
 						extraData={this.state}
 						keyExtractor={item => item.id.toString()}
 					/>
+				)}
+				{this.state.isLoading && (
+					<View style={{ position: "absolute", backgroundColor: "black", opacity: 0.2, top: 0, bottom: 0, right: 0, left: 0, justifyContent: "center", alignItems: "center" }}>
+						<ActivityIndicator animating={true} size="large" color="gray" />
+					</View>
 				)}
 			</SafeAreaView>
 		);
