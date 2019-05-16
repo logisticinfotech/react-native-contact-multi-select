@@ -9,12 +9,6 @@
 
 [In this article](https://www.logisticinfotech.com/blog/react-native-multi-select-library/) you will get step by step details about the library and its implementations with your React Native project
 
-## Npm repo
-https://www.npmjs.com/package/@logisticinfotech/react-native-contact-multi-select
-
-## Git repo
-https://github.com/logisticinfotech/react-native-contact-multi-select
-
 # Guide
 
 ![](RNContactMultiSelect.gif)

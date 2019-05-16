@@ -1,6 +1,6 @@
 {
   "name": "@logisticinfotech/react-native-contact-multi-select",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "React native contact multi selection.",
   "main": "Contacts.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/logisticinfotech/react-native-contact-multi-select/issues"
   },
-  "homepage": "https://github.com/logisticinfotech/react-native-contact-multi-select#readme",
+  "homepage": "https://www.logisticinfotech.com/blog/react-native-multi-select-library/",
   "dependencies": {
     "react-native-contacts": "^4.0.0"
   }
